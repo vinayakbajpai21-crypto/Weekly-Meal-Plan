@@ -1,0 +1,38 @@
+name: Weekly Meal Plan Email
+
+on:
+  schedule:
+    # Runs every Sunday at 08:30 UTC = 14:00 IST (2 PM India time)
+    # Cron format: minute hour day-of-month month day-of-week
+    # day-of-week: 0 = Sunday
+    - cron: '30 8 * * 0'
+
+  # Allows you to manually trigger the workflow from the GitHub Actions tab
+  # (great for testing without waiting until Sunday)
+  workflow_dispatch:
+
+jobs:
+  send-meal-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install anthropic
+
+      - name: Run meal plan agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+        run: python meal_plan_agent.py
