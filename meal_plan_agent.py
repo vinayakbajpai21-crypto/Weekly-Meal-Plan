@@ -58,7 +58,7 @@ def generate_meal_plan(client):
         + "]}, ... same for Tuesday through Sunday}"
     )
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=2000,
         messages=[{"role": "user", "content": prompt}],
     )
@@ -78,7 +78,7 @@ def find_recipe(client, dish_name):
         "- 3-sentence summary: method, key ingredients, and one tip"
     )
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=600,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
         messages=[{"role": "user", "content": prompt}],
